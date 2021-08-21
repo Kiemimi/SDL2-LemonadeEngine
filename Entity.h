@@ -1,17 +1,21 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include <math.h>
+#include "Maths.h"
 
 class Entity
 {
 public:
-	Entity(float x, float y, SDL_Texture* tex);
-	float getX();
-	float getY();
+	Entity(Vector2f p_pos, SDL_Texture* tex);
+	Vector2f& getPos()
+	{
+		return pos;
+	};
 	SDL_Texture* getTex();
 	SDL_Rect getCurrentFrame();
 private:
-	float x, y;
+	Vector2f pos;
 	SDL_Rect currentFrame;
 	SDL_Texture* tex;
 };

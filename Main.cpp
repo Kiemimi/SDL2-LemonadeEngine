@@ -1,5 +1,6 @@
 #include "RenderWindow.h"
 #include "Entity.h"
+#include "Utils.h"
 #include <vector>
 
 int main(int argv, char* args[])
@@ -18,24 +19,44 @@ int main(int argv, char* args[])
 
 	SDL_Texture* backgroundTexture = window.loadTexture("Assets/Images/Bg_Background.png");
 
-	std::vector<Entity> entities = {Entity(0, 0, backgroundTexture),
-									Entity(50, 50, backgroundTexture),
-									Entity(120, 120, backgroundTexture),
-									Entity(150, 150, backgroundTexture)};
+	std::vector<Entity> entities = {Entity(Vector2f(0, 0), backgroundTexture),
+									Entity(Vector2f(50, 50), backgroundTexture),
+									Entity(Vector2f(100, 100), backgroundTexture),
+									Entity(Vector2f(150, 150), backgroundTexture)};
 
 	bool gameRunning = true;
 
 	SDL_Event event;
 
+	float currentTime = utils::hireTimeInSeconds();
+	float accumulator = 0.0f;
+	const float timeStep = 0.01f;
+
 	while (gameRunning)
 	{
-		while (SDL_PollEvent(&event)) 
+		int startTick = SDL_GetTicks();
+		float newTime = utils::hireTimeInSeconds();
+		float frameTime = newTime - currentTime;
+
+		currentTime = newTime;
+
+		accumulator += frameTime;
+
+		while (accumulator >= timeStep) 
 		{
-			if (event.type == SDL_QUIT) 
+			while (SDL_PollEvent(&event))
 			{
-				gameRunning = false;
-			}	
+				if (event.type == SDL_QUIT)
+				{
+					gameRunning = false;
+				}
+			}
+
+			accumulator -= timeStep;
 		}
+
+		const float alpha = accumulator / timeStep;
+		
 		window.clear();
 
 		for (Entity& e : entities) 
@@ -44,6 +65,13 @@ int main(int argv, char* args[])
 		}
 
 		window.display();
+		
+		int frameTicks = SDL_GetTicks() - startTick;
+
+		if (frameTicks < 1000 / window.getRefreshRate()) 
+		{
+			SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
+		}
 	}
 
 	window.cleanUp();

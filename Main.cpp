@@ -1,5 +1,6 @@
 #include "RenderWindow.h"
 #include "Entity.h"
+#include <vector>
 
 int main(int argv, char* args[])
 {
@@ -17,7 +18,10 @@ int main(int argv, char* args[])
 
 	SDL_Texture* backgroundTexture = window.loadTexture("Assets/Images/Bg_Background.png");
 
-	Entity background0(0, 0, backgroundTexture);
+	std::vector<Entity> entities = {Entity(0, 0, backgroundTexture),
+									Entity(50, 50, backgroundTexture),
+									Entity(120, 120, backgroundTexture),
+									Entity(150, 150, backgroundTexture)};
 
 	bool gameRunning = true;
 
@@ -33,7 +37,12 @@ int main(int argv, char* args[])
 			}	
 		}
 		window.clear();
-		window.render(background0);
+
+		for (Entity& e : entities) 
+		{
+			window.render(e);
+		}
+
 		window.display();
 	}
 

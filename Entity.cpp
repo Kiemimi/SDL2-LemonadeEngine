@@ -27,3 +27,4 @@ SDL_Rect Entity::getCurrentFrame()
 {
 	return currentFrame;
 }
+

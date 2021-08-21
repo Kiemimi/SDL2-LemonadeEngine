@@ -30,6 +30,14 @@ void RenderWindow::cleanUp()
 	SDL_DestroyWindow(window);
 }
 
+int RenderWindow::getRefreshRate()
+{
+	int displayIndex = SDL_GetWindowDisplayIndex(window);
+	SDL_DisplayMode mode;
+	SDL_GetDisplayMode(displayIndex, 0, &mode);
+	return mode.refresh_rate;
+}
+
 void RenderWindow::clear()
 {
 	SDL_RenderClear(renderer);
@@ -44,8 +52,8 @@ void RenderWindow::render(Entity& entity)
 		src.h = entity.getCurrentFrame().h;
 
 	SDL_Rect dst;
-		dst.x = entity.getX() * 2;
-		dst.y = entity.getY() * 2;
+		dst.x = entity.getPos().x * 2;
+		dst.y = entity.getPos().y * 2;
 		dst.w = entity.getCurrentFrame().w * 2;
 		dst.h = entity.getCurrentFrame().h * 2;
 

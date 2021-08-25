@@ -21,7 +21,7 @@
     <ClCompile Include="RenderWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
+    <ClCompile Include="Entity32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Maths.cpp">

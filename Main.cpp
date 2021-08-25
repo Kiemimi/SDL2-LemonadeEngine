@@ -1,6 +1,7 @@
 #include "RenderWindow.h"
 #include "Entity.h"
 #include "Utils.h"
+#include "Maths.h"
 #include <vector>
 
 int main(int argv, char* args[])
@@ -18,11 +19,20 @@ int main(int argv, char* args[])
 	RenderWindow window("LemonadeEngine 1.0", 1280, 720);
 
 	SDL_Texture* backgroundTexture = window.loadTexture("Assets/Images/Bg_Background.png");
+	SDL_Texture* grassTexture = window.loadTexture("Assets/Images/Sp_Grass1.png");
 
-	std::vector<Entity> entities = {Entity(Vector2f(0, 0), backgroundTexture),
-									Entity(Vector2f(50, 50), backgroundTexture),
-									Entity(Vector2f(100, 100), backgroundTexture),
-									Entity(Vector2f(150, 150), backgroundTexture)};
+	std::vector<Entity> entities = {Entity(Vector2f(0, 0), backgroundTexture, Vector2f(1280, 720)),
+									Entity(Vector2f(0, 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64, 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (1 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (2 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (3 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (4 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (5 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (6 * 64), 656), grassTexture, Vector2f(64, 64)),
+									Entity(Vector2f(64 + (7 * 64), 656), grassTexture, Vector2f(64, 64)),
+									};
+									
 
 	bool gameRunning = true;
 
@@ -51,7 +61,6 @@ int main(int argv, char* args[])
 					gameRunning = false;
 				}
 			}
-
 			accumulator -= timeStep;
 		}
 
@@ -59,9 +68,13 @@ int main(int argv, char* args[])
 		
 		window.clear();
 
-		for (Entity& e : entities) 
+		for (Entity& ent : entities) 
 		{
-			window.render(e);
+			for (int i = 0; i < entities.size(); i++){
+				//Entity newVector(Vector2f(32, 430), grassTexture);
+				//entities.push_back(newVector);
+				window.render(ent);
+			}
 		}
 
 		window.display();
@@ -72,6 +85,8 @@ int main(int argv, char* args[])
 		{
 			SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
 		}
+
+		Vector2f print();
 	}
 
 	window.cleanUp();

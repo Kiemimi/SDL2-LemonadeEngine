@@ -52,10 +52,10 @@ void RenderWindow::render(Entity& entity)
 		src.h = entity.getCurrentFrame().h;
 
 	SDL_Rect dst;
-		dst.x = entity.getPos().x * 2;
-		dst.y = entity.getPos().y * 2;
-		dst.w = entity.getCurrentFrame().w * 2;
-		dst.h = entity.getCurrentFrame().h * 2;
+		dst.x = entity.getPos().x;
+		dst.y = entity.getPos().y;
+		dst.w = entity.getCurrentFrame().w;
+		dst.h = entity.getCurrentFrame().h;
 
 	SDL_RenderCopy(renderer, entity.getTex(), &src, &dst);
 }

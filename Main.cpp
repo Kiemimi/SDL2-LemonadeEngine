@@ -21,18 +21,13 @@ int main(int argv, char* args[])
 	SDL_Texture* backgroundTexture = window.loadTexture("Assets/Images/Bg_Background.png");
 	SDL_Texture* grassTexture = window.loadTexture("Assets/Images/Sp_Grass1.png");
 
-	std::vector<Entity> entities = {Entity(Vector2f(0, 0), backgroundTexture, Vector2f(1280, 720)),
-									Entity(Vector2f(0, 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64, 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (1 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (2 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (3 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (4 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (5 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (6 * 64), 656), grassTexture, Vector2f(64, 64)),
-									Entity(Vector2f(64 + (7 * 64), 656), grassTexture, Vector2f(64, 64)),
+	std::vector<Entity> entities =  {Entity(Vector2f(0, 0), backgroundTexture, Vector2f(1280, 720)),
 									};
-									
+
+	for (int i = 0; i < 100; i++) {
+		Entity newVector(Vector2f(128 * i, 656), grassTexture, Vector2f(128, 64));
+		entities.push_back(newVector);
+	}					
 
 	bool gameRunning = true;
 
@@ -49,7 +44,6 @@ int main(int argv, char* args[])
 		float frameTime = newTime - currentTime;
 
 		currentTime = newTime;
-
 		accumulator += frameTime;
 
 		while (accumulator >= timeStep) 
@@ -65,32 +59,23 @@ int main(int argv, char* args[])
 		}
 
 		const float alpha = accumulator / timeStep;
-		
+	
 		window.clear();
 
 		for (Entity& ent : entities) 
 		{
-			for (int i = 0; i < entities.size(); i++){
-				//Entity newVector(Vector2f(32, 430), grassTexture);
-				//entities.push_back(newVector);
-				window.render(ent);
-			}
+			window.render(ent);
 		}
 
 		window.display();
-		
 		int frameTicks = SDL_GetTicks() - startTick;
 
 		if (frameTicks < 1000 / window.getRefreshRate()) 
 		{
 			SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
 		}
-
-		Vector2f print();
 	}
-
 	window.cleanUp();
 	SDL_Quit();
-
 	return 0;
 }

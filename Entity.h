@@ -7,7 +7,10 @@
 class Entity
 {
 public:
-	Entity(Vector2f p_pos, SDL_Texture* tex, Vector2f dim);
+	Entity(Vector2f p_pos,
+		SDL_Texture* tex,
+		Vector2f dim,
+		SDL_RendererFlip flip = SDL_FLIP_NONE);
 	Vector2f& getPos()
 	{
 		return pos;

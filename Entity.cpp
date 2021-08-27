@@ -4,8 +4,7 @@
 //Takes some variables that we can send to create the entity and render it with whatever variables we need
 Entity::Entity( Vector2f p_pos, 
 				SDL_Texture* p_tex, 
-				Vector2f dim,
-				SDL_RendererFlip flip):pos(p_pos), tex(p_tex)
+				Vector2f dim):pos(p_pos), tex(p_tex)
 {
 	//In this case, we make a rect with two bottom variables we can use to initiate their position from Main
 	currentFrame.x = 0;

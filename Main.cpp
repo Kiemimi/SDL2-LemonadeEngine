@@ -51,7 +51,6 @@ int main(int argv, char* args[])
 
 	float p_x = 0.0f;
 	float p_y = 0.0f;
-	SDL_RendererFlip flipType = SDL_FLIP_NONE;
 
 	//While the game is running
 	while (gameRunning)
@@ -71,15 +70,14 @@ int main(int argv, char* args[])
 		//Adds the frame time to a timer called accumulator that handles the consistent game loop
 		accumulator += frameTime;
 		
-		Entity Player(Vector2f(p_x, p_y), playerIdle, Vector2f(64, 64), flipType);
+		Entity Player(Vector2f(p_x, p_y), playerIdle, Vector2f(64, 64));
 
-		if (p_y < 656 - 48) {
-			int velocity = p_y + 10;
-			float acceleration = velocity * frameTime;
-			p_y += acceleration;
+		if (p_y < 608) {
+			float gravity = 9.8f/1.5;
+			p_y += gravity;
 		}
 		else {
-			p_y = 656 - 48;
+			p_y = 608;
 		}
 
 		//While the game is running
@@ -94,25 +92,6 @@ int main(int argv, char* args[])
 					//Set gameRunning to false, closing the game loop.
 					gameRunning = false;
 				}
-				else if (event.type == SDL_KEYDOWN)
-				{
-					switch (event.key.keysym.sym)
-					{
-					case SDLK_a:
-						p_x -= 10 * timeStep * 50;
-						flipType = SDL_FLIP_VERTICAL;
-						std::cout << flipType << std::endl;
-						break;
-					case SDLK_d:
-						p_x += 10 * timeStep * 50;
-						flipType = SDL_FLIP_VERTICAL;
-						std::cout << flipType << std::endl;
-						break;
-					case SDLK_SPACE:
-						p_y -= 100;
-						break;
-					}
-				}
 			}
 			//Count time to check if the game is actively running
 			accumulator -= timeStep;
@@ -120,6 +99,17 @@ int main(int argv, char* args[])
 
 		//This acts as our deltaTime, a number that we can multiply variables by to ensure consistency no matter what the frame rate of the game is
 		const float alpha = accumulator / timeStep;
+
+		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+		if (currentKeyStates[SDL_SCANCODE_D]) {
+			p_x += 3;
+		}
+		if (currentKeyStates[SDL_SCANCODE_A]) {
+			p_x -= 3;
+		}
+		if (currentKeyStates[SDL_SCANCODE_SPACE] && p_y >= 608) {
+			p_y -= 100;
+		}
 	
 		//Clears the screen to render the new frame, preventing unintended renderer behavior.
 		window.clear();
@@ -142,11 +132,6 @@ int main(int argv, char* args[])
 			//Delay the game in-between frames
 			SDL_Delay(1000 / window.getRefreshRate() - frameTicks);
 		}
-	}
-
-	const Uint8* keystate = SDL_GetKeyboardState(NULL);
-	if (keystate[SDLK_q]) {
-		std::cout << "please work" << std::endl;
 	}
 
 	//When the gameRunning loop ends, clean up the window

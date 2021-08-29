@@ -52,6 +52,8 @@ int main(int argv, char* args[])
 	float p_x = 0.0f;
 	float p_y = 0.0f;
 
+	bool canJump = true;
+
 	//While the game is running
 	while (gameRunning)
 	{
@@ -61,7 +63,8 @@ int main(int argv, char* args[])
 		//Gets how much time has passed in milliseconds since the start of the game
 		float newTime = utils::hireTimeInSeconds();
 
-		//Time between frames is determined by how quickly the code loop operates
+		/* Time between frames is determined by how quickly the code loop operates,
+		**this is the same as deltaTime in unity.**  */
 		float frameTime = newTime - currentTime;
 
 		//Catches the time up to make it consistent between loops through the code
@@ -73,11 +76,12 @@ int main(int argv, char* args[])
 		Entity Player(Vector2f(p_x, p_y), playerIdle, Vector2f(64, 64));
 
 		if (p_y < 608) {
-			float gravity = 9.8f/1.5;
+			float gravity = 9.8f;
 			p_y += gravity;
 		}
 		else {
 			p_y = 608;
+			canJump = true;
 		}
 
 		//While the game is running
@@ -102,13 +106,14 @@ int main(int argv, char* args[])
 
 		const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
 		if (currentKeyStates[SDL_SCANCODE_D]) {
-			p_x += 3;
+			p_x += 250 * frameTime;
 		}
 		if (currentKeyStates[SDL_SCANCODE_A]) {
-			p_x -= 3;
+			p_x -= 250 * frameTime;
 		}
-		if (currentKeyStates[SDL_SCANCODE_SPACE] && p_y >= 608) {
-			p_y -= 100;
+		if (currentKeyStates[SDL_SCANCODE_SPACE] && canJump == true) {
+			p_y -= 9000 * frameTime;
+			canJump = false;
 		}
 	
 		//Clears the screen to render the new frame, preventing unintended renderer behavior.
